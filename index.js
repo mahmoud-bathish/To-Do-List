@@ -4,7 +4,6 @@ let tasksContainer = document.querySelector(".tasks-content");
 let tasksContainer2 = document.querySelector(".tasks-content .task-box ");
 let tasksCount = document.querySelector(".task-count span");
 let taskscompleted = document.querySelector(".tasks-completed span");
-console.log(tasksContainer)
 
 //Focus on input field
 window.onload = function () {
@@ -46,16 +45,9 @@ document.addEventListener('click', function (e) {
         e.target.classList.toggle("tasks-completed");
         toggleStatus(e.target.getAttribute("data-id"));
     }
+    
 })
 
-// })
-// function createNoTasks() {
-//     let msgSpan = document.createElement("span");
-//     let msgText = document.createTextNode("No Tasks To show");
-//     msgSpan.appendChild(msgText);
-//     msgSpan.className = 'no-tasks-message';
-//     tasksContainer.appendChild(msgSpan);
-// }
 function addTaskToArray(taskText) {
     const task = {
         id: Date.now(),
@@ -65,7 +57,6 @@ function addTaskToArray(taskText) {
 
     arrayOfTasks.push(task);
     addEleToPageFrom(arrayOfTasks);
-    //Local Storage
     addToLocalStorage(arrayOfTasks);
 }
 
@@ -75,7 +66,7 @@ function addEleToPageFrom(arrayOfTasks) {
         let div = document.createElement("div");
         div.className = 'task-box';
         if (task.completed) {
-            div.className = "task-box";
+            div.classList.add("tasks-completed") ;
         }
         div.setAttribute("data-id", task.id);
         div.appendChild(document.createTextNode(task.title));
@@ -85,10 +76,6 @@ function addEleToPageFrom(arrayOfTasks) {
         div.appendChild(deleteElement);
         tasksContainer.appendChild(div);
         tasksCount.innerHTML = arrayOfTasks.length;
-        let a = arrayOfTasks.filter((task) => task.completed = true);
-        // a.forEach(e =>{e.classList.add("tasks-completed")})
-        
-        taskscompleted.innerHTML = a.length;
     });
 }
 
@@ -110,21 +97,29 @@ function deleteTaskWith(taskId) {
         addToLocalStorage(arrayOfTasks);
     }
     tasksCount.innerHTML = arrayOfTasks.length;
-
+    if (arrayOfTasks.length == 0) {
+        let mySpan = document.createElement("span");
+        let spanText = document.createTextNode('No Tasks To Show');
+        mySpan.className = "no-tasks-message";
+        mySpan.appendChild(spanText);
+        tasksContainer.appendChild(mySpan);
+    }
 }
 
 function toggleStatus(taskId) {
     for (let i = 0; i < arrayOfTasks.length; i++) {
         if (arrayOfTasks[i].id == taskId) {
-           if (arrayOfTasks[i].completed == false){
-            arrayOfTasks[i].completed = true ;
-            taskscompleted.innerHTML ++;
-           } else{
-            arrayOfTasks[i].completed = false
-           } 
+            if (arrayOfTasks[i].completed == false) {
+                arrayOfTasks[i].completed = true;
+            } else {
+                arrayOfTasks[i].completed = false
+            }
         }
     }
+    let a = arrayOfTasks.filter(tass =>tass.completed ==true
+        )
+        taskscompleted.innerHTML = a.length;
+    tasksCount.innerHTML = arrayOfTasks.length;
+
     addToLocalStorage(arrayOfTasks);
 }
-
-
